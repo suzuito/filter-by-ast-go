@@ -6,8 +6,6 @@ import (
 	"go/token"
 	"reflect"
 	"strconv"
-
-	"golang.org/x/xerrors"
 )
 
 type element interface {
@@ -120,13 +118,13 @@ func evalFunction(post *Post, nodes *[]ast.Node) (*[]element, error) {
 			case token.INT:
 				i, err := strconv.Atoi(n.Value)
 				if err != nil {
-					return nil, xerrors.Errorf("%w: %+v", err, n)
+					return nil, fmt.Errorf("%w: %+v", err, n)
 				}
 				v = reflect.ValueOf(i)
 			case token.FLOAT:
 				i, err := strconv.ParseFloat(n.Value, 64)
 				if err != nil {
-					return nil, xerrors.Errorf("%w: %+v", err, n)
+					return nil, fmt.Errorf("%w: %+v", err, n)
 				}
 				v = reflect.ValueOf(i)
 			default:
@@ -140,7 +138,7 @@ func evalFunction(post *Post, nodes *[]ast.Node) (*[]element, error) {
 			} else if n.Op.String() == "||" {
 				t = elementOpOr
 			} else {
-				return nil, xerrors.Errorf("Unsupported op: %s", n.Op)
+				return nil, fmt.Errorf("Unsupported op: %s", n.Op)
 			}
 			ret = append(
 				ret,
@@ -155,7 +153,7 @@ func evalFunction(post *Post, nodes *[]ast.Node) (*[]element, error) {
 			}
 			b, err := strconv.ParseBool(n.Name)
 			if err != nil {
-				return nil, xerrors.Errorf("%w: %+v", err, n)
+				return nil, fmt.Errorf("%w: %+v", err, n)
 			}
 			args = append(args, reflect.ValueOf(b))
 		}

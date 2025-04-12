@@ -5,8 +5,6 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-
-	"golang.org/x/xerrors"
 )
 
 type visitorExpression struct {
@@ -41,7 +39,7 @@ func appendNode(visitor *visitorExpression) error {
 	case *ast.BinaryExpr:
 		// fmt.Printf("Bin : %v %s %v\n", n.X, n.Op, n.Y)
 		if n.Op != token.LAND && n.Op != token.LOR {
-			return xerrors.Errorf("Unsupported op: %s", n.Op)
+			return fmt.Errorf("Unsupported op: %s", n.Op)
 		}
 		visitor.Stack = append(visitor.Stack, n)
 		return nil
